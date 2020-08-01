@@ -338,7 +338,7 @@ function pagarMensalidadeRequerente() {
   //Nao esquecer de obter o objeto pelo jQuery!!
   $("#boxCommStatus").html("Sending transaction...");
   try {
-    amount = ethers.utils.parseUnits(ethers.BigNumber.from(amount), "gwei");
+    amount = ethers.utils.parseUnits(amount, "gwei");
     console.log("novo amount ", amount);
   } catch (err) {
     console.error("fazendo parse de valor ", err);
