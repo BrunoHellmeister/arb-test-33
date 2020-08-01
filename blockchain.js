@@ -338,7 +338,6 @@ function pagarMensalidadeRequerente() {
   //Nao esquecer de obter o objeto pelo jQuery!!
   $("#boxCommStatus").html("Sending transaction...");
   try {
-    console.log(ethers.utils.parseUnits("1.0", "gwei"), additionalSettings);
     console.log(ethers.utils.parseUnits(ethers.BigNumber.from(amount), "gwei"), additionalSettings);
   } catch (err) {
     console.error("fazendo parse de valor ", err);
