@@ -335,7 +335,8 @@ function pagarMensalidadeRequerente() {
     alert("You must pay a minimum of 1 gwei to the Contract");
     return false;
   }
-  boxCommStatus.innerHTML = "Sending transaction...";
+  //Nao esquecer de obter o objeto pelo jQuery!!
+  $("#boxCommStatus").html("Sending transaction...");
   var additionalSettings = {
     value: ethers.utils.parseUnits(amount, "gwei"),
   };
@@ -344,23 +345,23 @@ function pagarMensalidadeRequerente() {
     .PagarMensalidadeRequerente(additionalSettings)
     .then((tx) => {
       console.log("executePayment - Transaction ", tx);
-      boxCommStatus.innerHTML = "Transaction sent. Waiting for the result...";
+      $("#boxCommStatus").html("Transaction sent. Waiting for the result...");
       tx.wait()
         .then((resultFromContract) => {
           console.log("executePayment - the result was ", resultFromContract);
           getContractBalance();
-          boxCommStatus.innerHTML = "Transaction executed.";
+          $("#boxCommStatus").html("Transaction executed.");
         })
         .catch((err) => {
           console.error("executePayment - after tx being mint");
           console.error(err);
-          boxCommStatus.innerHTML = "Algo saiu errado: " + err.message;
+          $("#boxCommStatus").html("Algo saiu errado: " + err.message);
         });
     })
     .catch((err) => {
       console.error("executePayment - tx has been sent");
       console.error(err);
-      boxCommStatus.innerHTML = "Something went wrong: " + err.message;
+      $("#boxCommStatus").html("Something went wrong: " + err.message);
     });
 }
 
