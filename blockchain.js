@@ -338,13 +338,14 @@ function pagarMensalidadeRequerente() {
   //Nao esquecer de obter o objeto pelo jQuery!!
   $("#boxCommStatus").html("Sending transaction...");
   try {
-    console.log(ethers.utils.parseUnits(ethers.BigNumber.from(amount), "gwei"), additionalSettings);
+    amount = ethers.utils.parseUnits(ethers.BigNumber.from(amount), "gwei");
+    console.log("novo amount ", amount);
   } catch (err) {
     console.error("fazendo parse de valor ", err);
     return;
   }
   var additionalSettings = {
-    value: ethers.utils.parseUnits(amount, "gwei"),
+    value: amount,
   };
   contratoComSignatario
     .PagarMensalidadeRequerente(additionalSettings)
