@@ -331,7 +331,7 @@ function pagarMensalidadeRequerente() {
   //Como se trata de numero, importante multiplicar por 1 para que
   //o Javascript entenda perfeitamente que é um numero
   var amount = $("#valorMensalidade").val() * 1;
-  if (amount < 1) {
+  if (amount < 10000000) {
     alert("You must pay a minimum of 1 gwei to the Contract");
     return false;
   }
@@ -340,9 +340,9 @@ function pagarMensalidadeRequerente() {
   $("#boxCommStatus").focus();
   //Tenta fazer a conversao do valor a ser pago para wei
   try {
-    //amount = ethers.utils.parseUnits($("#valorMensalidade").val(), "gwei");
-    //importante: se for um valor fixo tem de passar como string, entre aspas
-    amount = ethers.utils.parseUnits("10000000", "gwei");
+    amount = ethers.utils.parseUnits($("#valorMensalidade").val(), "gwei");
+    //dica importante: se for um valor fixo tem de passar como string, entre aspas
+    //amount = ethers.utils.parseUnits("10000000", "gwei");
     console.log("novo amount ", amount);
   } catch (err) {
     console.error("erro fazendo parse de valor ", err);
