@@ -341,18 +341,20 @@ function pagarMensalidadeRequerente() {
   try {
     //amount = ethers.utils.parseUnits($("#valorMensalidade").val(), "gwei");
     //importante: se for um valor fixo tem de passar como string, entre aspas
-    amount = ethers.utils.parseUnits("1000000", "gwei");
+    amount = ethers.utils.parseUnits("10000000", "gwei");
     console.log("novo amount ", amount);
   } catch (err) {
     console.error("erro fazendo parse de valor ", err);
     return;
   }
   //
-  var additionalSettings = {
+  var overrides = {
     value: amount,
+    gasLimit: 300000,
   };
+  console.log("overrides ", overrides);
   contratoComSignatario
-    .PagarMensalidadeRequerente(additionalSettings)
+    .PagarMensalidadeRequerente(overrides)
     .then((tx) => {
       console.log("executePayment - Transaction ", tx);
       $("#boxCommStatus").html("Transaction sent. Waiting for the result...");
