@@ -11,22 +11,17 @@ contract GestaoDeArbitragem
     address public requerida;
     address public caseManager;
     address public presidenteDaCamaraArbitral;
-    uint256 private taxaDeRequerimento;
-    uint256 public dataDeProtocolo = now;
+    uint256 public taxaDeRequerimento;
+    uint256 public dataDeProtocolo = block.timestamp;
     uint256 public totalDeCoarbitros;
     bool public statusPagamentoDoRequerimento;
     address payable public contaCamaraDeArbitragem;
     uint256 public valorDaMensalidade;
-    mapping (address =>bool) public coarbitro;
-    mapping(address => bool) public arbitroPresidente;
-    mapping(address => bool) public requerentes;
-    mapping(address => bool) public requeridas;
     uint256 public confirmarAssinaturaNaSentenca;
-    event AssinaturaConfirmada(address eleitor);
-    uint256 taxaMensal;
+    uint256 public taxaMensal;
     bool[] public statusPagamentoMensalRequerente;
     bool[] public statusPagamentoMensalRequerida;
-    bool precisaDeaudiencia;
+    bool public precisaDeaudiencia;
     uint256 public custasDaAudienciaRequerente;
     bool public statusPagamentoAudienciaRequerente;
     uint256 public custasDaAudienciaRequerida;
@@ -35,6 +30,13 @@ contract GestaoDeArbitragem
     bool public statusPagamentoHonorariosRequerente;
     uint256 public honorariosArbitraisRequerida;
     bool public statusPagamentoHonorariosRequerida;
+    
+    mapping(address =>bool) public coarbitro;
+    mapping(address => bool) public arbitroPresidente;
+    mapping(address => bool) public requerentes;
+    mapping(address => bool) public requeridas;
+
+    event AssinaturaConfirmada(address eleitor);
     
     
     constructor(address payable _contaCamaraArb, uint256 _custasDoProtocolo, address _enderecoPresidente, uint256 _mensalidade) public 
