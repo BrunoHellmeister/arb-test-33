@@ -362,7 +362,7 @@ function pagarMensalidadeRequerente() {
       tx.wait()
         .then((resultFromContract) => {
           console.log("executePayment - the result was ", resultFromContract);
-          getContractBalance();
+          obtemSaldoContaCameraArbitragem();
           $("#boxCommStatus").html("Transaction executed.");
         })
         .catch((err) => {
@@ -411,14 +411,20 @@ function pagarTaxaDeRequerimento() {
     });
 }
 
-function getContractBalance() {
+function obtemSaldoContaCameraArbitragem() {
+  contratoComSignatario.contaCamaraDeArbitragem().then((account) => {
+    getAccountBalance(account);
+  });
+}
+
+function getAccountBalance(account) {
   provedorDeSignatarios
-    .getBalance(enderecoContrato)
+    .getBalance(account)
     .then((saldo) => {
-      alert("Agora o saldo do contrato é: " + saldo);
+      alert("O saldo atual é: " + saldo);
     })
     .catch((err) => {
-      console.error("Erro em getContractBalance ", err.message);
+      console.error("Erro em getAccountBalance ", err.message);
       console.error(err);
     });
 }
