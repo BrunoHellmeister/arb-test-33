@@ -66,7 +66,7 @@ function gerenciaTrocaDeSelecaoDeContas(_contas) {
       $("#btnSalvarCustasAudiencia").prop("disabled", false);
       $("#btnVerificar").prop("disabled", false);
       $("#btnPagarRequerimento").prop("disabled", false);
-      $("#btnPagarMesRequerente").prop("disabled", false);
+      $("#btnPagarMensalidadeRequerente").prop("disabled", false);
       $("#btnPagarMesRequerida").prop("disabled", false);
       $("#btnPagarHonorariosRequerente").prop("disabled", false);
       $("#btnPagarHonorariosRequerida").prop("disabled", false);
