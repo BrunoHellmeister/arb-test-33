@@ -72,7 +72,6 @@ function gerenciaTrocaDeSelecaoDeContas(_contas) {
       $("#btnPagarHonorariosRequerida").prop("disabled", false);
       $("#btnPagarAudienciaRequerente").prop("disabled", false);
       $("#btnPagarAudienciaRequerida").prop("disabled", false);
-      
     }
   }
   signatario = provedorDeSignatarios.getSigner();
@@ -80,4 +79,4 @@ function gerenciaTrocaDeSelecaoDeContas(_contas) {
 }
 
 // rascunho
-buscarDadosDoContratoInteligente(contratoComSignatario);
+//buscarDadosDoContratoInteligente(contratoComSignatario);
