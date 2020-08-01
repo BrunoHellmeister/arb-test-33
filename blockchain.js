@@ -337,13 +337,17 @@ function pagarMensalidadeRequerente() {
   }
   //Nao esquecer de obter o objeto pelo jQuery!!
   $("#boxCommStatus").html("Sending transaction...");
+  //Tenta fazer a conversao do valor a ser pago para wei
   try {
-    amount = ethers.utils.parseUnits($("#valorMensalidade").val(), "gwei");
+    //amount = ethers.utils.parseUnits($("#valorMensalidade").val(), "gwei");
+    //importante: se for um valor fixo tem de passar como string, entre aspas
+    amount = ethers.utils.parseUnits("1000000", "gwei");
     console.log("novo amount ", amount);
   } catch (err) {
-    console.error("fazendo parse de valor ", err);
+    console.error("erro fazendo parse de valor ", err);
     return;
   }
+  //
   var additionalSettings = {
     value: amount,
   };
