@@ -340,6 +340,7 @@ function pagarMensalidadeRequerente() {
   $("#boxCommStatus").focus();
   //Tenta fazer a conversao do valor a ser pago para wei
   try {
+    console.log("amount ", amount, "#valorMensalidade", $("#valorMensalidade").val());
     amount = ethers.utils.parseUnits($("#valorMensalidade").val(), "gwei");
     //dica importante: se for um valor fixo tem de passar como string, entre aspas
     //amount = ethers.utils.parseUnits("10000000", "gwei");
