@@ -336,7 +336,8 @@ function pagarMensalidadeRequerente() {
     return false;
   }
   //Nao esquecer de obter o objeto pelo jQuery!!
-  $("#boxCommStatus").html("Sending transaction...");
+  $("#boxCommStatus").html("Enviando transação...");
+  $("#boxCommStatus").focus();
   //Tenta fazer a conversao do valor a ser pago para wei
   try {
     //amount = ethers.utils.parseUnits($("#valorMensalidade").val(), "gwei");
@@ -356,7 +357,8 @@ function pagarMensalidadeRequerente() {
     .PagarMensalidadeRequerente(additionalSettings)
     .then((tx) => {
       console.log("executePayment - Transaction ", tx);
-      $("#boxCommStatus").html("Transaction sent. Waiting for the result...");
+      $("#boxCommStatus").html("Transação enviada. Aguarde o processamento...");
+      $("#boxCommStatus").focus();
       tx.wait()
         .then((resultFromContract) => {
           console.log("executePayment - the result was ", resultFromContract);
