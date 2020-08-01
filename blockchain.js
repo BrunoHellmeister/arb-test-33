@@ -429,5 +429,3 @@ function getAccountBalance(account) {
       console.error(err);
     });
 }
-
-alert("2025");
