@@ -348,13 +348,12 @@ function pagarMensalidadeRequerente() {
     return;
   }
   //
-  var overrides = {
+  var additionalSettings = {
     value: amount,
-    gasLimit: 300000,
   };
-  console.log("overrides ", overrides);
+  console.log("additionalSettings ", additionalSettings);
   contratoComSignatario
-    .PagarMensalidadeRequerente(overrides)
+    .PagarMensalidadeRequerente(additionalSettings)
     .then((tx) => {
       console.log("executePayment - Transaction ", tx);
       $("#boxCommStatus").html("Transaction sent. Waiting for the result...");
