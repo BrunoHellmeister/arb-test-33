@@ -2,6 +2,7 @@
   <head>
     <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
     <meta content="utf-8" http-equiv="encoding">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <title>⚖️ Secured Arbitration Online </title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="estilo.css">
@@ -13,10 +14,12 @@
       </section>
     </header>    
     <section>
-      <img src="http://www.maritimeissues.com/temp/-uploaded-EU_Philippine-delegation-arbitration-court-maritime-dispute-south-china-sea-west-philippine-sea_cr_420x270.jpg" alt="Arbitration" />
-      <br><br/>
+      <!-- Use imagens locais. Imagens de outros sites só o necessário -->
+      <img src="corte-arbitral-haia.jpg" alt="Corte Arbitral" />
+      <br>
+      <br>
       <p class="textoMarca textoTitulo">Confidencialidade e segurança na disputa e transparência no processo</p>
-      <p class="textoMarca" style="font-size:255%;"> 
+      <p id="boxCommStatus" class="textoMarca" style="font-size:255%;"> 
       </p>
       <br/><br/>
       <div id="botaoConexao">
@@ -160,63 +163,61 @@
             </div>
           </fieldset>
         </form>
-        <form name="formPagamentos" id="formPagamentos">
-          <fieldset>
-            <legend class="textoImportante"style="font-size:100%">Pagamentos das custas relacionadas ao processo arbitral &nbsp;</legend>
-            <br/>
+        <fieldset>
+          <legend class="textoImportante"style="font-size:100%">Pagamentos das custas relacionadas ao processo arbitral &nbsp;</legend>
+          <br/>
+          <div>
+            <label for="amount" class="textoImportante" style="font-size:80%">Pagar Taxa de Requerimento de Arbitragem: ETH </label>
+            <input type="number" name="taxaDeRequerimento" id="taxaDeRequerimento" value="1000000000000000"> in wei
+          </div>
+          <div>
             <div>
-              <label for="amount" class="textoImportante" style="font-size:80%">Pagar Taxa de Requerimento de Arbitragem: ETH </label>
-              <input type="number" name="taxaDeRequerimento" id="taxaDeRequerimento" value="1000000000000000"> in wei>
+              <button id="btnPagarRequerimento" class="textoImportante" style="font-size:70%" onclick="pagarTaxaDeRequerimento();" disabled>💱 Pagar</button>
             </div>
             <div>
-              <div>
-                <button id="btnPagarRequerimento" class="textoImportante" style="font-size:70%" onclick="pagarTaxaDeRequerimento();" disabled>💱 Pagar</button>
-              </div>
-              <div>
-                <label for="_valorVenal" class="textoImportante" style="font-size:80%">Pagar Mensalidade devida pela Requerente: ETH </label>
-                <input type="number" name="_valorVenal" id="_valorVenal">
-              </div>
-              <div>
-                <button id="btnPagarMesRequerente" class="textoImportante" style="font-size:70%" onclick="salvarRegistro();" disabled>💱 Pagar</button>
-              </div>
-              <div>
-                <label for="_valorVenal" class="textoImportante" style="font-size:80%">Pagar Mensalidade devida pela Requerida: ETH </label>
-                <input type="number" name="_valorVenal" id="_valorVenal">
-              </div>
-              <div>
-                  <button id="btnPagarMesRequerida" class="textoImportante" style="font-size:70%" onclick="salvarRegistro();" disabled>💱 Pagar</button>
-              </div>
-              <div>
-                <label for="_valorVenal" class="textoImportante" style="font-size:80%">Pagar Honorários dos Árbitros devidos pela Requerente: ETH </label>
-                <input type="number" name="_valorVenal" id="_valorVenal">
-              </div>
-              <div>
-                  <button id="btnPagarHonorariosRequerente" class="textoImportante" style="font-size:70%" onclick="salvarRegistro();" disabled>💱 Pagar</button>
-              </div>
-              <div>
-                <label for="_valorVenal" class="textoImportante" style="font-size:80%">Pagar Honorários dos Árbitros devidos pela Requerida ETH </label>
-                <input type="number" name="_valorVenal" id="_valorVenal">
-              </div>
-              <div>
-                  <button id="btnPagarHonorariosRequerida" class="textoImportante" style="font-size:70%" onclick="salvarRegistro();" disabled>💱 Pagar</button>
-              </div>
-              <div>
-                <label for="_valorVenal" class="textoImportante" style="font-size:80%">Pagar Custas da Audiência devidas pela Requerente ETH </label>
-                <input type="number" name="_valorVenal" id="_valorVenal">
-              </div>
-              <div>
-                  <button id="btnPagarAudienciaRequerente" class="textoImportante" style="font-size:70%" onclick="salvarRegistro();" disabled>💱 Pagar</button>
-              </div>
-              <div>
-                <label for="_valorVenal" class="textoImportante" style="font-size:80%">Pagar Custas da Audiência devidas pela Requerida ETH </label>
-                <input type="number" name="_valorVenal" id="_valorVenal">
-              </div>
-              <div>
-                  <button id="btnPagarAudienciaRequerida" class="textoImportante" style="font-size:70%" onclick="salvarRegistro();" disabled>💱 Pagar</button>
-              </div>
+              <label for="valorMensalidade" class="textoImportante" style="font-size:80%">Pagar Mensalidade devida pela Requerente: </label>
+              <input type="number" name="valorMensalidade" id="valorMensalidade" value="10000000"> gwei
             </div>
-          </fieldset>
-        </form>
+            <div>
+              <button id="btnPagarMensalidadeRequerente" class="textoImportante" style="font-size:70%" onclick="pagarMensalidadeRequerente();" disabled>💱 Pagar</button>
+            </div>
+            <div>
+              <label for="_valorVenal" class="textoImportante" style="font-size:80%">Pagar Mensalidade devida pela Requerida: ETH </label>
+              <input type="number" name="_valorVenal" id="_valorVenal">
+            </div>
+            <div>
+                <button id="btnPagarMesRequerida" class="textoImportante" style="font-size:70%" onclick="salvarRegistro();" disabled>💱 Pagar</button>
+            </div>
+            <div>
+              <label for="_valorVenal" class="textoImportante" style="font-size:80%">Pagar Honorários dos Árbitros devidos pela Requerente: ETH </label>
+              <input type="number" name="_valorVenal" id="_valorVenal">
+            </div>
+            <div>
+                <button id="btnPagarHonorariosRequerente" class="textoImportante" style="font-size:70%" onclick="salvarRegistro();" disabled>💱 Pagar</button>
+            </div>
+            <div>
+              <label for="_valorVenal" class="textoImportante" style="font-size:80%">Pagar Honorários dos Árbitros devidos pela Requerida ETH </label>
+              <input type="number" name="_valorVenal" id="_valorVenal">
+            </div>
+            <div>
+                <button id="btnPagarHonorariosRequerida" class="textoImportante" style="font-size:70%" onclick="salvarRegistro();" disabled>💱 Pagar</button>
+            </div>
+            <div>
+              <label for="_valorVenal" class="textoImportante" style="font-size:80%">Pagar Custas da Audiência devidas pela Requerente ETH </label>
+              <input type="number" name="_valorVenal" id="_valorVenal">
+            </div>
+            <div>
+                <button id="btnPagarAudienciaRequerente" class="textoImportante" style="font-size:70%" onclick="salvarRegistro();" disabled>💱 Pagar</button>
+            </div>
+            <div>
+              <label for="_valorVenal" class="textoImportante" style="font-size:80%">Pagar Custas da Audiência devidas pela Requerida ETH </label>
+              <input type="number" name="_valorVenal" id="_valorVenal">
+            </div>
+            <div>
+                <button id="btnPagarAudienciaRequerida" class="textoImportante" style="font-size:70%" onclick="salvarRegistro();" disabled>💱 Pagar</button>
+            </div>
+          </div>
+        </fieldset>
       </p>           
     </section>
     <section id="statusTransacoes" style="display: none;">
