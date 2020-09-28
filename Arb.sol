@@ -1,27 +1,31 @@
 /*
 SPDX-License-Identifier: CC-BY-4.0
-(c) Desenvolvido por Bruno Hellmeister
+(c) Desenvolvido por Bruno Hellmeister - 2020 - Todos os direitos reservados
 */
 pragma solidity 0.6.10;
 
 
 contract GestaoDeArbitragem 
 {
-    address public requerente;
-    address public requerida;
+    
     address public caseManager;
     address public presidenteDaCamaraArbitral;
     uint256 public taxaDeRequerimento;
-    uint256 public dataDeProtocolo = block.timestamp;
+    uint256 public dataDeProtocolo = now;
     uint256 public totalDeCoarbitros;
     bool public statusPagamentoDoRequerimento;
     address payable public contaCamaraDeArbitragem;
     uint256 public valorDaMensalidade;
+    mapping (address =>bool) public coarbitro;
+    mapping(address => bool) public arbitroPresidente;
+    mapping(address => bool) public requerentes;
+    mapping(address => bool) public requeridas;
     uint256 public confirmarAssinaturaNaSentenca;
-    uint256 public taxaMensal;
+    event AssinaturaConfirmada(address presidenteDaCamaraArbitral);
+    uint256 public confirmarAssinaturaNosEsclarecimentos;
     bool[] public statusPagamentoMensalRequerente;
     bool[] public statusPagamentoMensalRequerida;
-    bool public precisaDeaudiencia;
+    bool precisaDeaudiencia;
     uint256 public custasDaAudienciaRequerente;
     bool public statusPagamentoAudienciaRequerente;
     uint256 public custasDaAudienciaRequerida;
@@ -31,13 +35,6 @@ contract GestaoDeArbitragem
     uint256 public honorariosArbitraisRequerida;
     bool public statusPagamentoHonorariosRequerida;
     
-    mapping(address =>bool) public coarbitro;
-    mapping(address => bool) public arbitroPresidente;
-    mapping(address => bool) public requerentes;
-    mapping(address => bool) public requeridas;
-
-    event AssinaturaConfirmada(address eleitor);
-    
     
     constructor(address payable _contaCamaraArb, uint256 _custasDoProtocolo, address _enderecoPresidente, uint256 _mensalidade) public 
     {
@@ -45,7 +42,7 @@ contract GestaoDeArbitragem
         taxaDeRequerimento = _custasDoProtocolo;
         contaCamaraDeArbitragem = _contaCamaraArb;
         presidenteDaCamaraArbitral = _enderecoPresidente;
-        taxaMensal = _mensalidade;
+        valorDaMensalidade = _mensalidade;
     }
  
  
@@ -96,21 +93,46 @@ contract GestaoDeArbitragem
     return true;
     }
     
-    function assinarSentencaCoArbitro (uint256 opcao) public returns (bool) {
+    function assinarSentencaCoArbitro (uint256 code) public returns (bool) {
     require(coarbitro[msg.sender] == true, "Árbitro não encontrado");
-    if (opcao == 1) {
+    if (code == 1) {
       confirmarAssinaturaNaSentenca = confirmarAssinaturaNaSentenca + 1;
     } 
     emit AssinaturaConfirmada(msg.sender);
+    coarbitro[msg.sender] = false;
+    totalDeCoarbitros = totalDeCoarbitros - 1;
     return true;
     }
     
-    function assinarSentencaArbitroPresidente (uint256 opcao) public returns (bool) {
+    function assinarSentencaArbitroPresidente (uint256 code) public returns (bool) {
     require (arbitroPresidente[msg.sender] == true, "Árbitro não encontrado");
-    if (opcao == 1) {
+    if (code == 1) {
       confirmarAssinaturaNaSentenca = confirmarAssinaturaNaSentenca + 1;
     } 
     emit AssinaturaConfirmada(msg.sender);
+    arbitroPresidente[msg.sender] = false;
+    return true;
+    }
+    
+    
+    function assinarEsclarecimentosCoArbitro (uint256 code) public returns (bool) {
+    require(coarbitro[msg.sender] == true, "Árbitro não encontrado");
+    if (code == 2) {
+      confirmarAssinaturaNaSentenca = confirmarAssinaturaNaSentenca + 1;
+    } 
+    emit AssinaturaConfirmada(msg.sender);
+    coarbitro[msg.sender] = false;
+    totalDeCoarbitros = totalDeCoarbitros - 1;
+    return true;
+    }
+    
+    function assinarEsclarecimentosArbitroPresidente (uint256 code) public returns (bool) {
+    require (arbitroPresidente[msg.sender] == true, "Árbitro não encontrado");
+    if (code == 2) {
+      confirmarAssinaturaNaSentenca = confirmarAssinaturaNaSentenca + 1;
+    } 
+    emit AssinaturaConfirmada(msg.sender);
+    arbitroPresidente[msg.sender] = false;
     return true;
     }
     
@@ -141,13 +163,13 @@ contract GestaoDeArbitragem
     }
     
     function PagarMensalidadeRequerente() public payable {
-        require(msg.value>=taxaMensal, "Valor insuficiente");
+        require(msg.value>=valorDaMensalidade, "Valor insuficiente");
         contaCamaraDeArbitragem.transfer(msg.value);
         statusPagamentoMensalRequerente.push(true);
     }
     
     function PagarMensalidadeRequerida() public payable {
-        require(msg.value>=taxaMensal, "Valor insuficiente");
+        require(msg.value>=valorDaMensalidade, "Valor insuficiente");
         contaCamaraDeArbitragem.transfer(msg.value);
         statusPagamentoMensalRequerida.push(true);
     }
@@ -189,18 +211,40 @@ contract GestaoDeArbitragem
         statusPagamentoHonorariosRequerida = true;
     }
     
-    function haPendencia(uint256 _duracaoArbitragemMeses) public returns (bool){ 
-        require(statusPagamentoDoRequerimento == true, "Requerimento não pago");
-        require(statusPagamentoHonorariosRequerente == true,  "Honorarios devidos pela Requerente não pago");
-        require(statusPagamentoHonorariosRequerida == true,  "Honorarios devidos pela Requerente não pago");
-        require(statusPagamentoMensalRequerente.length == _duracaoArbitragemMeses, "Mensalidade da Requerente Pendente");
-        require(statusPagamentoMensalRequerida.length == _duracaoArbitragemMeses, "Mensalidade da Requerida Pendente");
-        if (precisaDeaudiencia = false) {
-            return false;
+    function haPendencia(uint256 _duracaoArbitragemMeses) public view returns (string memory){ 
+        if (statusPagamentoDoRequerimento == false) {
+            return "Requerimento de Arbitragem não pago";
         } else {
-            require(statusPagamentoAudienciaRequerente == true, "custas da audiencia não paga pela Requerente");
-            require(statusPagamentoAudienciaRequerida == true, "custas da audiencia não paga pela Requerida");
-            return false;
+            if (statusPagamentoHonorariosRequerente == false) {
+            return "Honorarios devidos pela Requerente não pagos";
+            } else {
+                if (statusPagamentoHonorariosRequerida == false) {
+                    return "Honorarios devidos pela Requerida não pagos";
+                } else {
+                    if (statusPagamentoMensalRequerente.length != _duracaoArbitragemMeses) {
+                        return "Mensalidade da Requerente Pendente";
+                    } else {
+                        if(statusPagamentoMensalRequerida.length != _duracaoArbitragemMeses) {
+                            return "Mensalidade da Requerida Pendente";
+                        } else {
+                            if (precisaDeaudiencia == false) {
+                             return "Não há pendencia";
+                        } else if (precisaDeaudiencia == true) {
+                            if (statusPagamentoAudienciaRequerente == false) {
+                                return "custas da audiencia não paga pela Requerente";
+                            } else {
+                                if (statusPagamentoAudienciaRequerida == false) {
+                                    return "custas da audiencia não paga pela Requerida";
+                                } else {
+                                    return "Não há pendencia";
+                                  }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
+                        
